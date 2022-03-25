@@ -25,6 +25,7 @@ db.once("open", () => {
 // ------------------require routers ------------
 
 const indexRouter = require("./routes/index");
+const autourRouter = require("./routes/author");
 
 //---------------------------------------
 
@@ -33,10 +34,13 @@ app.set("views", __dirname + "/views");
 app.set("layout", "layouts/layout");
 app.use(expressLayouts);
 app.use(express.static("public"));
+app.use(express.urlencoded({ extends: false, limit: "10mb" }));
+app.use(express.json());
 
 // -------------- use routers ----------------------
 
 app.use("/", indexRouter);
+app.use("/authors", autourRouter);
 
 // -------------------------------------------------
 const port = process.env.PORT || 3000;
