@@ -1,8 +1,23 @@
 const router = require("express").Router();
 const Author = require("../models/authorModel");
 // All Authors Route
-router.get("/", (req, res) => {
-  res.render("authors/index");
+router.get("/", async (req, res) => {
+  let serchOptions = {};
+  if (req.query != null && req.query.name != "") {
+    serchOptions.name = new RegExp(req.query.name, "i");
+    // serchOptions.name = `/${req.query.name}/i`;
+    console.log(serchOptions);
+  }
+
+  try {
+    const authors = await Author.find(serchOptions);
+    res.render("authors/index", {
+      authors: authors,
+      serchOptions: req.query,
+    });
+  } catch {
+    res.redirect("/");
+  }
 });
 
 // New Authors Route
